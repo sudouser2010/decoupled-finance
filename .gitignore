@@ -153,7 +153,3 @@ cython_debug/
 # node stuff
 **/node_modules/
 **/package-lock.json
-
-# ignore blockchain-related data
-master_node/state_db.json
-master_node/block_db.json
