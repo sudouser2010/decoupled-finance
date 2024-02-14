@@ -1,0 +1,6 @@
+autoflake==2.2.1
+flake8==7.0.0
+specific-import==0.9.5
+tinydb==4.7.1
+tornado==6.2
+yapf==0.40.2
