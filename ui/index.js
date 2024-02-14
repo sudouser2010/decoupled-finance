@@ -1,1 +1,1 @@
-// Todo: this will Javascript-based code that will do mining, and initiate transactions
+// Todo: this is Javascript-based code that will do mining, and initiate transactions

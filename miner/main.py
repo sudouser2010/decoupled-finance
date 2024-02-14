@@ -1,3 +1,3 @@
 """
-Todo: this will Python-based code that will do mining
+Todo: this is Python-based code that will do mining
 """
