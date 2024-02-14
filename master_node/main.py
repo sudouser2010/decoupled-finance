@@ -43,6 +43,7 @@ class Transaction(BaseHTTPHandler):
         returns transactions in a given block
         :return:
         """
+        pass
 
 
 class UnminedBlock(BaseHTTPHandler):

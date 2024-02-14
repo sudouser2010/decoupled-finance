@@ -4,8 +4,7 @@ from threading import Thread
 from tinydb import TinyDB, Query
 from specific_import import import_file
 
-from common.table_utils import table_get
-
+table_get = import_file('../table_utils.py').table_get
 Block = import_file('../block.py').Block
 Transaction = import_file('../transaction.py').Transaction
 BLOCK_DB_LOCATION = import_file('../constants.py').BLOCK_DB_LOCATION
