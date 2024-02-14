@@ -156,4 +156,4 @@ cython_debug/
 
 # ignore blockchain-related data
 master_node/state_db.json
-master_node/blockchain_db.json
+master_node/block_db.json
