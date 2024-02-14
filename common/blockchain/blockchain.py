@@ -22,6 +22,7 @@ class Blockchain:
         * token amounts
         * unmined block data
     """
+
     def __init__(self, seconds_between_blocks: int = 60):
         # set persistent blockchain attributes
         self.seconds_between_blocks = seconds_between_blocks
@@ -68,7 +69,10 @@ class Blockchain:
         self.unmined_block = None
 
     def create_first_block(self):
-        genesis_block = Block(index=0, transactions=[], end_timestamp=self.int_timestamp(), previous_hash=None)
+        genesis_block = Block(index=0,
+                              transactions=[],
+                              end_timestamp=self.int_timestamp(),
+                              previous_hash=None)
         genesis_block.hash = genesis_block.compute_hash()
         self.chain.append(genesis_block)
         self.reset_unmined_block_data()
@@ -80,13 +84,10 @@ class Blockchain:
         # store a snapshot of the unmined_transactions
         unmined_transactions_copy = self.unmined_transactions[::]
 
-        self.unmined_block = Block(
-            index=self.index,
-            transactions=unmined_transactions_copy,
-            end_timestamp=self.unmined_timestamp,
-            previous_hash=self.previous_block.hash
-        )
-
+        self.unmined_block = Block(index=self.index,
+                                   transactions=unmined_transactions_copy,
+                                   end_timestamp=self.unmined_timestamp,
+                                   previous_hash=self.previous_block.hash)
         """
             reset unmined_transaction so that any transactions
             submitted after will go into the next unmined_block
@@ -103,17 +104,10 @@ class Blockchain:
         self.block_table.insert(new_block)
 
     def increase_address_amount_after_mining(self, address: str):
-        default_account = {
-            'address': address,
-            'amount': 0
-        }
+        default_account = {'address': address, 'amount': 0}
         query = Query().address == address
 
-        account_state = table_get(
-            self.amount_table,
-            query,
-            default_account
-        )
+        account_state = table_get(self.amount_table, query, default_account)
 
         account_state['amount'] += self.amount_mined_per_block
         self.amount_table.upsert(account_state, query)
@@ -139,8 +133,8 @@ class Blockchain:
         return True
 
     def is_valid_proof(self, block: Block, block_hash: str):
-        return (block_hash.startswith('0' * self.difficulty) and
-                block_hash == block.compute_hash())
+        return (block_hash.startswith('0' * self.difficulty)
+                and block_hash == block.compute_hash())
 
     def add_unmined_transaction(self, transaction: Transaction):
         """.
@@ -176,22 +170,21 @@ class Blockchain:
         while self.active:
             self.delay_loop()
 
-            unmined_block_has_not_ended = self.int_timestamp() < self.unmined_timestamp
+            unmined_block_has_not_ended = self.int_timestamp(
+            ) < self.unmined_timestamp
             unmined_block_has_not_been_mined = self.unmined_block is not None
-
             """
             if the unmined block is still open for storing transactions, then don't set the unmined_block.
                 Also...
             if the unmined block already exists, then it hasn't been mined and we shouldn't set another unmined_block
                 b/c doing so would discard the preexisting unmined_block.
-                This works b/c when an unmined_block is mined, then it is set to None            
+                This works b/c when an unmined_block is mined, then it is set to None
             """
             if unmined_block_has_not_ended or unmined_block_has_not_been_mined:
                 continue
-
             """
-            create an unmined block based on the previous block and 
-            a snapshot of current unmined transactions            
+            create an unmined block based on the previous block and
+            a snapshot of current unmined transactions
             """
             self.set_unmined_block()
 
@@ -200,7 +193,5 @@ class Blockchain:
         runs the blocking part of code in its own thread
         :return:
         """
-        th = Thread(
-            target=self.run_blocking,
-        )
+        th = Thread(target=self.run_blocking, )
         th.start()

@@ -11,9 +11,7 @@ This is a webserver which does the following:
 import asyncio
 
 from specific_import import import_file
-import tornado.web
-from tornado import gen
-
+import tornado
 
 BaseHTTPHandler = import_file('base_http_handler.py').BaseHTTPHandler
 Blockchain = import_file('../common/blockchain/blockchain.py').Blockchain
@@ -25,11 +23,13 @@ BLOCKCHAIN.run()
 
 
 class HealthCheck(BaseHTTPHandler):
+
     def get(self):
         self.write({"status": "okay"})
 
 
 class Transaction(BaseHTTPHandler):
+
     @tornado.gen.coroutine
     def post(self):
         """
@@ -46,6 +46,7 @@ class Transaction(BaseHTTPHandler):
 
 
 class UnminedBlock(BaseHTTPHandler):
+
     @tornado.gen.coroutine
     def post(self):
         """
@@ -70,7 +71,7 @@ class UnminedBlock(BaseHTTPHandler):
             }
             self.write(result)
 
-        except (Exception,) as e:
+        except (Exception, ):
             self.set_status(500)
             self.write('ERROR MINING WITH PROOF')
 
@@ -86,11 +87,9 @@ class UnminedBlock(BaseHTTPHandler):
             else:
                 data = None
 
-            self.write({
-                'data': data
-            })
+            self.write({'data': data})
 
-        except (Exception,) as e:
+        except (Exception, ):
             self.set_status(500)
             self.write('ERROR GETTING UNMINED BLOCK')
 

@@ -16,7 +16,8 @@ class BaseHTTPHandler(web.RequestHandler):
         print("setting headers for cors")
         self.set_header("Access-Control-Allow-Origin", "*")
         self.set_header("Access-Control-Allow-Headers", "x-requested-with")
-        self.set_header('Access-Control-Allow-Methods', ' PUT, DELETE, OPTIONS')
+        self.set_header('Access-Control-Allow-Methods',
+                        ' PUT, DELETE, OPTIONS')
 
     def options(self):
         # no body
@@ -40,7 +41,5 @@ class BaseHTTPHandler(web.RequestHandler):
 
     @staticmethod
     def log_error(error_message, e):
-        logging.error(
-            f'{error_message}: {e}',
-            extra=dict(exception_detail=traceback.format_exc())
-        )
+        logging.error(f'{error_message}: {e}',
+                      extra=dict(exception_detail=traceback.format_exc()))

@@ -3,7 +3,9 @@ import json
 
 
 class Block:
-    def __init__(self, index: int, transactions: list[dict], end_timestamp: int, previous_hash: str):
+
+    def __init__(self, index: int, transactions: list[dict],
+                 end_timestamp: int, previous_hash: str):
         self.index = index
         self.transactions = transactions
         self.end_timestamp = end_timestamp
