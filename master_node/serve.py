@@ -56,8 +56,8 @@ class UnminedBlock(BaseHTTPHandler):
         """
         try:
             proof: str = self.get_argument_and_split('proof')
-            account: str = self.get_argument_and_split('account')
-            success = BLOCKCHAIN.mine_block(account, proof)
+            address: str = self.get_argument_and_split('address')
+            success = BLOCKCHAIN.mine_block(address, proof)
             amount_mined = 0
 
             if success:
@@ -66,7 +66,7 @@ class UnminedBlock(BaseHTTPHandler):
             result = {
                 'data': {
                     'success': success,
-                    'account': account,
+                    'address': address,
                     'amount_mined': amount_mined
                 }
             }

@@ -5,14 +5,20 @@ import json
 class Block:
 
     def __init__(self, index: int, transactions: list[dict],
-                 end_timestamp: int, previous_hash: str):
+                 end_timestamp: int, previous_hash: str, difficulty: int = 1):
+        # used for determining order in blockchain
         self.index = index
+
+        # used for finding a proof for block
+        self.nonce = 0
+
         self.transactions = transactions
         self.end_timestamp = end_timestamp
         self.previous_hash = previous_hash
 
         # initialize the current hash as None
         self.hash = ''
+        self.difficulty = difficulty
 
     def compute_hash(self) -> str:
         """

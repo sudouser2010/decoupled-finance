@@ -25,7 +25,7 @@ class Blockchain:
     def __init__(self, seconds_between_blocks: int = 60):
         # set persistent blockchain attributes
         self.seconds_between_blocks = seconds_between_blocks
-        self.difficulty: int = 2
+        self.difficulty: int = 1
         self.block_table = block_db.table('block')
         self.amount_table = state_db.table('amount')
         self.active = True
@@ -68,10 +68,13 @@ class Blockchain:
         self.unmined_block = None
 
     def create_first_block(self):
-        genesis_block = Block(index=0,
-                              transactions=[],
-                              end_timestamp=self.int_timestamp(),
-                              previous_hash=None)
+        genesis_block = Block(
+            index=0,
+            transactions=[],
+            end_timestamp=self.int_timestamp(),
+            previous_hash=None,
+            difficulty=self.difficulty
+        )
         genesis_block.hash = genesis_block.compute_hash()
         self.chain.append(genesis_block)
         self.reset_unmined_block_data()
@@ -83,10 +86,13 @@ class Blockchain:
         # store a snapshot of the unmined_transactions
         unmined_transactions_copy = self.unmined_transactions[::]
 
-        self.unmined_block = Block(index=self.index,
-                                   transactions=unmined_transactions_copy,
-                                   end_timestamp=self.unmined_timestamp,
-                                   previous_hash=self.previous_block.hash)
+        self.unmined_block = Block(
+            index=self.index,
+            transactions=unmined_transactions_copy,
+            end_timestamp=self.unmined_timestamp,
+            previous_hash=self.previous_block.hash,
+            difficulty=self.difficulty
+        )
         """
             reset unmined_transaction so that any transactions
             submitted after will go into the next unmined_block
