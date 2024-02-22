@@ -1,3 +1,4 @@
+import copy
 from dataclasses import dataclass
 
 from specific_import import import_file
@@ -14,4 +15,4 @@ class Transaction:
     amount: int
 
     def as_dict(self):
-        return self.__dict__
+        return copy.deepcopy(self.__dict__)

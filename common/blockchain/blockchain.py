@@ -36,11 +36,9 @@ class Blockchain:
         # for unmined block data
         self.index: int = 0
         self.unmined_transactions: list[dict] = []
-        self.unmined_timestamp: int = self.int_timestamp()
-        self.unmined_block = None
-
-        # create first block
-        self.create_first_block()
+        self.unmined_timestamp: int = self.int_timestamp() + self.seconds_between_blocks
+        self.unmined_block = False
+        self.set_unmined_block()
 
     @property
     def amount_mined_per_block(self):
@@ -58,26 +56,12 @@ class Blockchain:
         """
         return int(time.time())
 
-    @property
-    def previous_block(self) -> Block:
-        return self.chain[-1]
-
     def reset_unmined_block_data(self):
         self.index += 1
         self.unmined_timestamp += self.seconds_between_blocks
-        self.unmined_block = None
 
-    def create_first_block(self):
-        genesis_block = Block(
-            index=0,
-            transactions=[],
-            end_timestamp=self.int_timestamp(),
-            previous_hash=None,
-            difficulty=self.difficulty
-        )
-        genesis_block.hash = genesis_block.compute_hash()
-        self.chain.append(genesis_block)
-        self.reset_unmined_block_data()
+        # set unmined_block as None
+        self.unmined_block = False
 
     def set_unmined_block(self) -> None:
         """
@@ -90,7 +74,7 @@ class Blockchain:
             index=self.index,
             transactions=unmined_transactions_copy,
             end_timestamp=self.unmined_timestamp,
-            previous_hash=self.previous_block.hash,
+            previous_hash=None,
             difficulty=self.difficulty
         )
         """
@@ -117,29 +101,45 @@ class Blockchain:
         account_state['amount'] += self.amount_mined_per_block
         self.amount_table.upsert(account_state, query)
 
-    def mine_block(self, address: str, proof: str) -> bool:
+    def mine_block(self, address: str, winning_nonce: int) -> bool:
         """
         :param address: a hash representing the miner's account
-        :param proof: a hash which makes the unmined_block valid
+        :param winning_nonce: a nonce which makes the hash of the unmined_block valid
         :return:
         """
         # when an unmined block does not exist, return False
-        if self.unmined_block is None:
+        if not self.unmined_block:
             return False
 
-        # when proof for the unmined block does not work, return False
-        if not self.is_valid_proof(self.unmined_block, proof):
+        # compute hash based on wining_nonce
+        block_hash = self.unmined_block.compute_hash(winning_nonce)
+        difficulty = self.unmined_block.difficulty
+
+        # when nonce for the unmined block does not work, return False
+        if not self.is_hash_valid(block_hash, difficulty):
             return False
 
-        self.unmined_block.hash = proof
+        self.unmined_block.hash = block_hash
+        self.unmined_block.nonce = winning_nonce
+
+        if len(self.chain):
+            self.unmined_block.previous_hash = self.chain[-1]['hash']
+
         self.update_blockchain_data(self.unmined_block)
         self.reset_unmined_block_data()
         self.increase_address_amount_after_mining(address)
         return True
 
-    def is_valid_proof(self, block: Block, block_hash: str):
-        return (block_hash.startswith('0' * self.difficulty)
-                and block_hash == block.compute_hash())
+    @staticmethod
+    def is_hash_valid(block_hash: str, difficulty: int):
+        """
+        block_hash is considered valid when it starts with zero
+
+        :param block_hash:
+        :param difficulty:
+        :return:
+        """
+        return block_hash.startswith('0' * difficulty)
 
     def add_unmined_transaction(self, transaction: Transaction):
         """.
@@ -177,16 +177,20 @@ class Blockchain:
 
             unmined_block_has_not_ended = self.int_timestamp(
             ) < self.unmined_timestamp
-            unmined_block_has_not_been_mined = self.unmined_block is not None
+            unmined_block_has_not_been_mined = self.unmined_block is not False
+
+            # if the unmined block is still open for storing transactions, then don't set the unmined_block.
+            if unmined_block_has_not_ended:
+                continue
+
             """
-            if the unmined block is still open for storing transactions, then don't set the unmined_block.
-                Also...
             if the unmined block already exists, then it hasn't been mined and we shouldn't set another unmined_block
                 b/c doing so would discard the preexisting unmined_block.
-                This works b/c when an unmined_block is mined, then it is set to None
+                This works b/c when an unmined_block is mined, then it is set to None            
             """
-            if unmined_block_has_not_ended or unmined_block_has_not_been_mined:
+            if unmined_block_has_not_been_mined:
                 continue
+
             """
             create an unmined block based on the previous block and
             a snapshot of current unmined transactions

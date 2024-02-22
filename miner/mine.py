@@ -18,9 +18,10 @@ class Mine:
         self.url = f'{master_node_url}:{port}/unmined-block'
 
     @staticmethod
-    def find_proof_hash(unmined_block: dict):
+    def find_winning_nonce(unmined_block: dict) -> int:
         """
-        Loops repeatedly until a valid hash is found
+        Loops through repeatedly and finds the nonce which results in a valid block hash.
+        Each loop the block nonce is incremented
         :return:
         """
         difficulty = unmined_block['difficulty']
@@ -31,7 +32,7 @@ class Mine:
             block_hash_is_valid = block_hash.startswith('0' * difficulty)
             print(block_hash)
             if block_hash_is_valid:
-                return block_hash
+                return unmined_block['nonce']
 
             # when hash doesn't meet condition, adjust the nonce and try again
             unmined_block['nonce'] += 1
@@ -47,13 +48,13 @@ class Mine:
                 if not unmined_block:
                     continue
 
-                proof = self.find_proof_hash(unmined_block)
+                winning_nonce = self.find_winning_nonce(unmined_block)
 
                 data = {
-                    'proof': proof,
+                    'winning_nonce': winning_nonce,
                     'address': self.address_doing_mining
                 }
-                r = requests.post(url=self.url, json=data)
+                r = requests.post(url=self.url, data=data)
                 data = r.json()
                 mining_result = data.get('data')
 

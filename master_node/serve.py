@@ -51,17 +51,17 @@ class UnminedBlock(BaseHTTPHandler):
     @tornado.gen.coroutine
     def post(self):
         """
-        Uses proof to solve the unmined block.
+        Uses winning_nonce to solve the unmined block.
         :return:
         """
         try:
-            proof: str = self.get_argument_and_split('proof')
-            address: str = self.get_argument_and_split('address')
-            success = BLOCKCHAIN.mine_block(address, proof)
+            winning_nonce: int = int(self.get_argument('winning_nonce'))
+            address: str = self.get_argument('address')
+            success = BLOCKCHAIN.mine_block(address, winning_nonce)
             amount_mined = 0
 
             if success:
-                amount_mined = BLOCKCHAIN.amount_mined_per_block()
+                amount_mined = BLOCKCHAIN.amount_mined_per_block
 
             result = {
                 'data': {
@@ -72,7 +72,7 @@ class UnminedBlock(BaseHTTPHandler):
             }
             self.write(result)
 
-        except (Exception, ):
+        except Exception as e:
             self.set_status(500)
             self.write('ERROR MINING WITH PROOF')
 

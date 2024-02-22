@@ -1,3 +1,4 @@
+import copy
 from dataclasses import dataclass
 
 
@@ -11,4 +12,4 @@ class Amount:
         Returns this object but as a dictionary
         :return:
         """
-        return self.__dict__
+        return copy.deepcopy(self.__dict__)

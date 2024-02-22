@@ -1,3 +1,4 @@
+import copy
 from hashlib import sha512
 import json
 
@@ -20,17 +21,25 @@ class Block:
         self.hash = ''
         self.difficulty = difficulty
 
-    def compute_hash(self) -> str:
+    def compute_hash(self, nonce: int) -> str:
         """
-        Creates a hash based on the current state of this block
+        Creates a hash based on the
+            current state of the block
+            and the nonce value
         :return:
         """
-        block_string = json.dumps(self.as_dict(), sort_keys=True)
-        return sha512(block_string.encode()).hexdigest()
+        # set block nonce before getting hash
+        block_dict = self.as_dict()
+        block_dict['nonce'] = nonce
+
+        block_string = json.dumps(block_dict, sort_keys=True)
+        block_hash = sha512(block_string.encode()).hexdigest()
+
+        return block_hash
 
     def as_dict(self) -> dict:
         """
         Returns this object but as a dictionary
         :return:
         """
-        return self.__dict__
+        return copy.deepcopy(self.__dict__)

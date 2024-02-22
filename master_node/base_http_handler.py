@@ -30,15 +30,6 @@ class BaseHTTPHandler(web.RequestHandler):
     def get(self):
         pass
 
-    def get_argument_and_split(self, arg_name: str, delimiter: str = ','):
-        arg_value = self.get_argument(arg_name, '')
-        if arg_value == '':
-            return []
-
-        # make into lowercase
-        arg_value = [s.lower() for s in arg_value.split(delimiter)]
-        return arg_value
-
     @staticmethod
     def log_error(error_message, e):
         logging.error(f'{error_message}: {e}',
