@@ -1,6 +1,12 @@
 import copy
+from dataclasses import dataclass
 from hashlib import sha512
 import json
+
+
+@dataclass
+class BlockMetaData:
+    has_been_mined: bool = False
 
 
 class Block:
@@ -17,9 +23,11 @@ class Block:
         self.end_timestamp = end_timestamp
         self.previous_hash = previous_hash
 
-        # initialize the current hash as None
         self.hash = ''
         self.difficulty = difficulty
+
+        # __meta__ stores meta data on the block
+        self.__meta__ = BlockMetaData()
 
     def compute_hash(self, nonce: int) -> str:
         """
@@ -42,4 +50,9 @@ class Block:
         Returns this object but as a dictionary
         :return:
         """
-        return copy.deepcopy(self.__dict__)
+        d = copy.deepcopy(self.__dict__)
+
+        # remove block meta data
+        del d['__meta__']
+
+        return d

@@ -37,7 +37,9 @@ class Blockchain:
         self.index: int = 0
         self.unmined_transactions: list[dict] = []
         self.unmined_timestamp: int = self.int_timestamp() + self.seconds_between_blocks
-        self.unmined_block = False
+        self.unmined_block = None
+
+        # initialize first block
         self.set_unmined_block()
 
     @property
@@ -59,9 +61,6 @@ class Blockchain:
     def reset_unmined_block_data(self):
         self.index += 1
         self.unmined_timestamp += self.seconds_between_blocks
-
-        # set unmined_block as None
-        self.unmined_block = False
 
     def set_unmined_block(self) -> None:
         """
@@ -107,10 +106,6 @@ class Blockchain:
         :param winning_nonce: a nonce which makes the hash of the unmined_block valid
         :return:
         """
-        # when an unmined block does not exist, return False
-        if not self.unmined_block:
-            return False
-
         # compute hash based on wining_nonce
         block_hash = self.unmined_block.compute_hash(winning_nonce)
         difficulty = self.unmined_block.difficulty
@@ -121,6 +116,7 @@ class Blockchain:
 
         self.unmined_block.hash = block_hash
         self.unmined_block.nonce = winning_nonce
+        self.unmined_block.__meta__.has_been_mined = True
 
         if len(self.chain):
             self.unmined_block.previous_hash = self.chain[-1]['hash']
@@ -177,7 +173,6 @@ class Blockchain:
 
             unmined_block_has_not_ended = self.int_timestamp(
             ) < self.unmined_timestamp
-            unmined_block_has_not_been_mined = self.unmined_block is not False
 
             # if the unmined block is still open for storing transactions, then don't set the unmined_block.
             if unmined_block_has_not_ended:
@@ -188,7 +183,7 @@ class Blockchain:
                 b/c doing so would discard the preexisting unmined_block.
                 This works b/c when an unmined_block is mined, then it is set to None            
             """
-            if unmined_block_has_not_been_mined:
+            if not self.unmined_block.__meta__.has_been_mined:
                 continue
 
             """
