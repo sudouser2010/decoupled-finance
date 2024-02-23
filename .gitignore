@@ -154,5 +154,5 @@ cython_debug/
 **/node_modules/
 **/package-lock.json
 
-**/block_db.json
-**/state_db.json
+master_node/block_db.json
+master_node/state_db.json
