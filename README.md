@@ -13,5 +13,11 @@ The closed-source version will be a blockchain that is decoupled from
 the fiat system. More on this to come...
 
 ### How to Run
-* pip install -r requirements.txt
-* python master_node/main.py
+#### Install Requirements
+    pip install -r requirements.txt
+
+#### Create Flat Database Files
+    touch master_node/block_db.json master_node/state_db.json
+
+#### Run Blockchain Server
+    python master_node/main.py
