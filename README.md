@@ -6,8 +6,10 @@ Note, this code is untested and very much unfinished. The purpose is
 to demonstrate a blockchain built in Python for my [Meetup group](https://www.meetup.com/florida-python-ninjas/).
 
 ### Why the Name Decoupled?
-The closed-source version will be a blockchain that is decoupled from
+This blockchain will be decoupled from
 the fiat system. More on this to come...
+
+------------------
 
 ### How to Run
 #### Install Requirements
@@ -19,6 +21,7 @@ the fiat system. More on this to come...
 #### Run Blockchain Server
     python master_node/main.py
 
+------------------
 
 ### References
 While working on this, I read upon previous Python-based blockchain tutorials
