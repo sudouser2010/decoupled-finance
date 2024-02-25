@@ -72,7 +72,7 @@ class UnminedBlock(BaseHTTPHandler):
             }
             self.write(result)
 
-        except Exception as e:
+        except Exception:
             self.set_status(500)
             self.write('ERROR MINING WITH PROOF')
 

@@ -181,7 +181,7 @@ class Blockchain:
             """
             if the unmined block already exists, then it hasn't been mined and we shouldn't set another unmined_block
                 b/c doing so would discard the preexisting unmined_block.
-                This works b/c when an unmined_block is mined, then it is set to None            
+                This works b/c when an unmined_block is mined, then it is set to None
             """
             if not self.unmined_block.__meta__.has_been_mined:
                 continue
