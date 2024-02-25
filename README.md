@@ -21,3 +21,10 @@ the fiat system. More on this to come...
 
 #### Run Blockchain Server
     python master_node/main.py
+
+
+### References
+While working on this, I read upon previous Python-based blockchain tutorials
+to gain an understanding of the fundamentals.
+* https://www.activestate.com/blog/how-to-build-a-blockchain-in-python/
+* https://www.geeksforgeeks.org/create-simple-blockchain-using-python/
