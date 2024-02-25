@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="/lib/css/googlefonts.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="/lib/css/vuetify.min.css" rel="stylesheet">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+  <style>
+    .hidden{visibility: hidden;}
+    html::-webkit-scrollbar {
+      display: none;
+    }
+    .v-bottom-navigation__content a{max-width: None !important}
+  </style>
+  <script src="https://unpkg.com/@bitjson/qr-code@1.0.2/dist/qr-code.js"></script>
+  <script src="https://unpkg.com/dexie/dist/dexie.js"></script>
+</head>
+<body>
+  <div id="app">
+    <v-app id="v_app">
+      <router-view></router-view>
+    </v-app>
+  </div>
+  <script src="https://unpkg.com/vue@3.3.0-beta.1/dist/vue.global.prod.js"></script>
+  <script src="/lib/js/vue-router.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@3.1.5/dist/vuetify.min.js"></script>
+  <script type = "module" src = "webapp.js"></script>
+</body>
+</html>
