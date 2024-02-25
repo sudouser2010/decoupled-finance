@@ -19,7 +19,7 @@ the fiat system. More on this to come...
     touch master_node/block_db.json master_node/state_db.json
 
 #### Run Blockchain Server
-    python master_node/main.py
+    python master_node/blockchain_server.py
 
 ------------------
 
