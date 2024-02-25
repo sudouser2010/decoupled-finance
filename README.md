@@ -21,6 +21,11 @@ the fiat system. More on this to come...
 #### Run Blockchain Server
     python master_node/blockchain_server.py
 
+#### Run Blockchain Miner
+    python miner/mine.py
+
+#### Run Blockchain UI
+    python ui/webapp_server.py
 ------------------
 
 ### References
