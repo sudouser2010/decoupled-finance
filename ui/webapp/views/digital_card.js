@@ -1,7 +1,8 @@
 export default {
   components: {
   },
-   template : `      
+   template : `   
+    <div>Balance: 0 DC</div>   
     <qr-code 
     id="qr-code"
     contents="publicKey"

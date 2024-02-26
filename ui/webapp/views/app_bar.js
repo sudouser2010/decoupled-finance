@@ -21,7 +21,7 @@ export default {
                          
 
     <div style="width: 30%; text-align: right">
-      <v-btn  @click="goToScan()" variant="outlined" size="small"
+      <v-btn variant="outlined" size="small"
         style="margin-right: 20px;"
       >
         Send Token

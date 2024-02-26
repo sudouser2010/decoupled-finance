@@ -40,6 +40,7 @@ class IndexHandler(BaseHTTPHandler):
 def make_app():
     endpoints = [
         (r'/', IndexHandler),
+        (r'/index.html', IndexHandler),
         (r'/(.*)', tornado.web.StaticFileHandler, UI_SETTINGS),
     ]
     return tornado.web.Application(endpoints, template_path=UI_SETTINGS['path'])
