@@ -123,8 +123,8 @@ def make_app():
 
 async def main():
     app = make_app()
-    print('Running On Port:', CONSTANTS.PORT)
-    app.listen(CONSTANTS.PORT)
+    print('Running On Port:', CONSTANTS.BLOCK_CHAIN_SERVER_PORT)
+    app.listen(CONSTANTS.BLOCK_CHAIN_SERVER_PORT)
     await asyncio.Event().wait()
 
 

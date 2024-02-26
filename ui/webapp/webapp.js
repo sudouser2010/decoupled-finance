@@ -29,10 +29,6 @@ createApp({
   data: function() {
    return {
       router: router,
-      apiResource: "/api",
-      desired: [],
-      undesired: [],
-      productType: ''
       }
    },
   methods:{

@@ -14,9 +14,9 @@ export default {
   style="position: relative !important; height: 100px"
   >
     <div style="width: 70%">
-        <div style="font-weight: 500; font-size: 40px; margin-left: 20px;">
+        <diSv style="font-weight: 500; font-size: 40px; margin-left: 20px;">
             Decoupled Finance
-        </div>  
+        </diSv>  
     </div>
                          
 
@@ -37,28 +37,7 @@ export default {
     activeColor: 'white',
   }),
   methods: {
-    goToScan() {
-      this.$root.router.replace({ name: 'scan' })
-    },
-    goToSearch() {
-      this.$root.router.replace({ name: 'search' })
-    }
   },
   computed: {
-    scanIconColor() {
-      if (this.$root.router.currentRoute.name === 'scan') {
-        return this.activeColor
-      }
-      return this.defaultColor
-    },
-    searchIconColor() {
-      if (this.$root.router.currentRoute.name === 'search') {
-        return this.activeColor
-      }
-      return this.defaultColor
-    },
-    donateUrl() {
-      return `${this.$root.apiResource}/donate`
-    },
   }
 }

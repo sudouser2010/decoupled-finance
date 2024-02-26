@@ -3,13 +3,20 @@ import asyncio
 from typing import Optional, Awaitable
 
 import tornado.web
+from specific_import import import_file
 from tornado import web, concurrent
 
-PORT = 5000
+CONSTANTS = import_file('../common/constants.py')
+
 UI_SETTINGS = {
     'path': os.path.abspath(os.path.join(os.path.dirname(__file__), 'webapp')),
     'default_filename': 'index.html'
 }
+
+BLOCK_CHAIN_SERVER_URL = os.getenv(
+    'BLOCK_CHAIN_SERVER_URL',
+    CONSTANTS.DEVELOPMENT_BLOCK_CHAIN_URL
+)
 
 
 class BaseHTTPHandler(web.RequestHandler):
@@ -25,22 +32,23 @@ class BaseHTTPHandler(web.RequestHandler):
         self.set_header('Access-Control-Allow-Methods', ' PUT, DELETE, OPTIONS')
 
 
-class HealthCheck(BaseHTTPHandler):
+class IndexHandler(BaseHTTPHandler):
     def get(self):
-        self.write({"status": "okay"})
+        self.render('index.html', BLOCK_CHAIN_SERVER_URL=BLOCK_CHAIN_SERVER_URL)
 
 
 def make_app():
     endpoints = [
+        (r'/', IndexHandler),
         (r'/(.*)', tornado.web.StaticFileHandler, UI_SETTINGS),
     ]
-    return tornado.web.Application(endpoints)
+    return tornado.web.Application(endpoints, template_path=UI_SETTINGS['path'])
 
 
 async def main():
     app = make_app()
-    print('Running On Port:', PORT)
-    app.listen(PORT)
+    print('Running On Port:', CONSTANTS.WEBAPP_SERVER_PORT)
+    app.listen(CONSTANTS.WEBAPP_SERVER_PORT)
     await asyncio.Event().wait()
 
 

@@ -25,6 +25,10 @@
   <script src="https://unpkg.com/vue@3.3.0-beta.1/dist/vue.global.prod.js"></script>
   <script src="/lib/js/vue-router.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vuetify@3.1.5/dist/vuetify.min.js"></script>
+  <script>
+    // set Javascript Globals based on backend settings
+    const BLOCK_CHAIN_SERVER_URL = "{{ BLOCK_CHAIN_SERVER_URL }}"
+  </script>
   <script type = "module" src = "webapp.js"></script>
 </body>
 </html>
