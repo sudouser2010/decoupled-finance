@@ -91,6 +91,12 @@ class Blockchain:
         # update persistent blockchain data
         self.block_table.insert(new_block)
 
+    def get_address_state(self, address: str):
+        default_state = {'address': address, 'amount': 0}
+        query = Query().address == address
+        state = table_get(self.amount_table, query, default_state)
+        return state
+
     def increase_address_amount_after_mining(self, address: str):
         default_account = {'address': address, 'amount': 0}
         query = Query().address == address

@@ -95,10 +95,27 @@ class UnminedBlock(BaseHTTPHandler):
             self.write('ERROR GETTING UNMINED BLOCK')
 
 
+class State(BaseHTTPHandler):
+    def get(self):
+        """
+        Gets the current the state of an address
+        :return:
+        """
+        try:
+            address: str = self.get_argument('address')
+            state = BLOCKCHAIN.get_address_state(address)
+            self.write({'data': state})
+
+        except (Exception, ):
+            self.set_status(500)
+            self.write('ERROR GETTING ADDRESS STATE')
+
+
 def make_app():
     endpoints = [
         # (r'/transaction', Transaction),
         (r'/unmined-block', UnminedBlock),
+        (r'/state', State),
         (r'/health-check', HealthCheck),
     ]
     return tornado.web.Application(endpoints)
