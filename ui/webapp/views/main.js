@@ -11,7 +11,7 @@ export default {
       
     <div style="max-width: 500px; width: 90%; height: 100%">
                                
-      <v-row justify="center" style="margin-bottom: 120px">
+      <v-row justify="center" style="margin-bottom: 120px; position: relative">
         <digital_card></digital_card>   
       </v-row> 
        

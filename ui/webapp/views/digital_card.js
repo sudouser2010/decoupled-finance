@@ -2,17 +2,26 @@ export default {
   components: {
   },
    template : `   
-    <div>Balance: 0 DC</div>   
+    <component is="style">
+        #balance {
+          font-size: 32px;
+          font-weight: bold;
+          margin-top: 20px;
+          position: absolute;
+          color: deeppink;        
+        }
+        #qr-code {
+          width: 600px;
+          height: 600px;
+          margin: 3em auto;        
+        }         
+    </component>
+    <div id="balance">Balance: {{$root.balance}} DC</div>      
     <qr-code 
     id="qr-code"
     contents="publicKey"
     position-ring-color="#13532d"
     position-center-color="#70c559"
-    style="
-    width: 600px;
-    height: 600px;
-    margin: 2em auto;
-  "
     ></qr-code>
    `,
   data: () => ({

@@ -28,12 +28,29 @@ const vuetify = createVuetify()
 createApp({
   data: function() {
    return {
-      router: router,
+       router: router,
+       balance: ' ',
       }
    },
   methods:{
+   setBalance : async function() {
+     const url = `${BLOCK_CHAIN_SERVER_URL}/state?address=placeholder`;
+     let response
+
+     try {
+       response = await fetch(url);
+     } catch (e) {
+       alert('ERROR: COULD NOT CONNECT TO API')
+       return
+     }
+     if (response.status >= 200 && response.status <= 204) {
+       let data = await response.json()
+       this.balance = data?.data?.amount || 0
+     }
+   }
   },
   mounted: async function() {
+    await this.setBalance()
   }
 
 }).use(router).use(vuetify).mount('#app')
