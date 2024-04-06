@@ -88,7 +88,10 @@ class UnminedBlock(BaseHTTPHandler):
             else:
                 data = None
 
-            self.write({'data': data})
+            self.write({
+                'data': data,
+                'can_be_mined': BLOCKCHAIN.unmined_block_has_ended
+            })
 
         except (Exception, ):
             self.set_status(500)
