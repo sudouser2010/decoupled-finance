@@ -9,6 +9,7 @@ Block = import_file('../block.py').Block
 Transaction = import_file('../transaction.py').Transaction
 BLOCK_DB_LOCATION = import_file('../constants.py').BLOCK_DB_LOCATION
 STATE_DB_LOCATION = import_file('../constants.py').STATE_DB_LOCATION
+BLOCK_DURATION_IN_SECONDS_LOWER_LIMIT = import_file('../constants.py').BLOCK_DURATION_IN_SECONDS_LOWER_LIMIT
 
 block_db = TinyDB(BLOCK_DB_LOCATION)
 state_db = TinyDB(STATE_DB_LOCATION)
@@ -22,9 +23,9 @@ class Blockchain:
         * unmined block data
     """
 
-    def __init__(self, seconds_between_blocks: int = 60):
+    def __init__(self):
         # set persistent blockchain attributes
-        self.seconds_between_blocks = seconds_between_blocks
+        self.seconds_between_blocks = BLOCK_DURATION_IN_SECONDS_LOWER_LIMIT
         self.difficulty: int = 1
         self.block_table = block_db.table('block')
         self.amount_table = state_db.table('amount')

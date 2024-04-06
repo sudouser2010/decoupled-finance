@@ -10,3 +10,4 @@ BLOCK_DB_LOCATION = os.path.join(ROOT_FOLDER_PATH, 'master_node',
                                  'block_db.json')
 STATE_DB_LOCATION = os.path.join(ROOT_FOLDER_PATH, 'master_node',
                                  'state_db.json')
+BLOCK_DURATION_IN_SECONDS_LOWER_LIMIT = 60

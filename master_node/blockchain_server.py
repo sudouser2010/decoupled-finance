@@ -2,7 +2,7 @@
 This is a webserver which does the following:
     -starts a Decoupled blockchain instance
     -returns the latest unmined block
-    -mines an unmined block with a given proof
+    -mines an unmined block with a given proof nonce
 
     Todo:
         -records transactions in current block

@@ -67,6 +67,6 @@ if __name__ == '__main__':
     m = Mine(
         address_doing_mining='placeholder',
         master_node_url='http://localhost',
-        port=CONSTANTS.PORT
+        port=CONSTANTS.BLOCK_CHAIN_SERVER_PORT
     )
     m.run()
