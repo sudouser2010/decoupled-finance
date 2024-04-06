@@ -1,3 +1,4 @@
+import math
 import time
 from threading import Thread
 
@@ -57,7 +58,7 @@ class Blockchain:
         Returns the seconds since the epoch as an int
         :return:
         """
-        return int(time.time())
+        return math.floor(time.time())
 
     def reset_unmined_block_data(self):
         self.index += 1
