@@ -11,6 +11,7 @@ Transaction = import_file('../transaction.py').Transaction
 BLOCK_DB_LOCATION = import_file('../constants.py').BLOCK_DB_LOCATION
 STATE_DB_LOCATION = import_file('../constants.py').STATE_DB_LOCATION
 BLOCK_DURATION_IN_SECONDS_LOWER_LIMIT = import_file('../constants.py').BLOCK_DURATION_IN_SECONDS_LOWER_LIMIT
+LOAD_FROM_DB_ON_RESTART = import_file('../constants.py').LOAD_FROM_DB_ON_RESTART
 
 block_db = TinyDB(BLOCK_DB_LOCATION)
 state_db = TinyDB(STATE_DB_LOCATION)
@@ -34,6 +35,7 @@ class Blockchain:
 
         # for blockchain history
         self.chain: list[Block] = []
+        self.setup_blockchain_data()
 
         # for unmined block data
         self.index: int = 0
@@ -43,6 +45,22 @@ class Blockchain:
 
         # initialize first block
         self.set_unmined_block()
+
+    def setup_blockchain_data(self):
+        if LOAD_FROM_DB_ON_RESTART:
+            # load block_chain data
+            self.chain = [
+                entry for entry in self.block_table.all()
+            ]
+        else:
+            # clear block_chain and amount tables
+            self.block_table.truncate()
+            self.amount_table.truncate()
+
+        self.index = len(self.chain)
+
+    def load_preexisting_blockchain_data_from_db(self):
+        pass
 
     @property
     def amount_mined_per_block(self):
