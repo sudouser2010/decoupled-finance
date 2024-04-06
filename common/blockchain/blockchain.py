@@ -113,6 +113,9 @@ class Blockchain:
         :param winning_nonce: a nonce which makes the hash of the unmined_block valid
         :return:
         """
+        if not self.unmined_block_has_ended:
+            return False
+
         # compute hash based on wining_nonce
         block_hash = self.unmined_block.compute_hash(winning_nonce)
         difficulty = self.unmined_block.difficulty
@@ -174,15 +177,16 @@ class Blockchain:
         """
         time.sleep(delay)
 
+    @property
+    def unmined_block_has_ended(self) -> bool:
+        return self.int_timestamp() > self.unmined_timestamp
+
     def run_blocking(self):
         while self.active:
             self.delay_loop()
 
-            unmined_block_has_not_ended = self.int_timestamp(
-            ) < self.unmined_timestamp
-
             # if the unmined block is still open for storing transactions, then don't set the unmined_block.
-            if unmined_block_has_not_ended:
+            if not self.unmined_block_has_ended:
                 continue
 
             """
