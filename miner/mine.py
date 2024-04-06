@@ -44,6 +44,10 @@ class Mine:
                 r = requests.get(url=self.url)
                 data = r.json()
                 unmined_block = data.get('data')
+                can_be_mined = data.get('can_be_mined')
+
+                if not can_be_mined:
+                    continue
 
                 if not unmined_block:
                     continue
