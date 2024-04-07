@@ -33,15 +33,15 @@ class Blockchain:
         self.amount_table = state_db.table('amount')
         self.active = True
 
-        # for blockchain history
-        self.chain: list[Block] = []
-        self.setup_blockchain_data()
-
         # for unmined block data
         self.index: int = 0
         self.unmined_transactions: list[dict] = []
         self.unmined_timestamp: int = self.int_timestamp() + self.seconds_between_blocks
         self.unmined_block = None
+
+        # for blockchain history
+        self.chain: list[Block] = []
+        self.setup_blockchain_data()
 
         # initialize first block
         self.set_unmined_block()
@@ -50,7 +50,7 @@ class Blockchain:
         if LOAD_FROM_DB_ON_RESTART:
             # load block_chain data
             self.chain = [
-                entry for entry in self.block_table.all()
+                dict(entry) for entry in self.block_table.all()
             ]
         else:
             # clear block_chain and amount tables
