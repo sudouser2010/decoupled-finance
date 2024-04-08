@@ -28,21 +28,6 @@ export default {
     db: null,
   }),
   methods:{
-ab2str: function (buf) {
-  return String.fromCharCode.apply(null, new Uint8Array(buf));
-},
-
-/*
-Export the given key and write it into the "exported-key" space.
-*/
-exportCryptoKey: async function(key) {
-  const exported = await window.crypto.subtle.exportKey("spki", key);
-  const exportedAsString = this.ab2str(exported);
-  const exportedAsBase64 = window.btoa(exportedAsString);
-  const pemExported = `-----BEGIN PUBLIC KEY-----\n${exportedAsBase64}\n-----END PUBLIC KEY-----`;
-
- return pemExported
-},
 
     initDB : async function() {
       // create DB with schema if it doesn't exist
@@ -58,70 +43,15 @@ exportCryptoKey: async function(key) {
       })
     },
 
-    // ab2b64: function(arrayBuffer) {
-    //     return window.btoa(String.fromCharCode.apply(null, new Uint8Array(arrayBuffer)))
-    // },
     generateKeys : async function() {
 
-
-// const keyPairaa = await window.crypto.subtle.generateKey(
-//     {
-//       name: "RSA-OAEP",
-//       // Consider using a 4096-bit key for systems that require long-term security
-//       modulusLength: 2048,
-//       publicExponent: new Uint8Array([1, 0, 1]),
-//       hash: "SHA-256",
-//     },
-//     true,
-//     ["encrypt", "decrypt"],
-//   )
-//       debugger
-//           const foo = await this.exportCryptoKey(keyPairaa.privateKey);
-//     console.log(foo)
-//     alert(foo)
-
-
-const aa = await window.crypto.subtle
-  .generateKey(
-    {
-      name: "ECDSA",
-      namedCurve: "P-384",
-    },
-    true,
-    ["sign", "verify"],
-  )
-      const aa1 = await this.exportCryptoKey(aa.privateKey);
-      console.log(aa1)
-    alert(aa1)
-
-  // Generate key pair
-      const keypair = await window.crypto.subtle.generateKey(
-          {
-              name: "ECDSA",
-              namedCurve: "P-256", // secp256r1
-          },
-          true,
-          ["sign", "verify"]
-      )
-      debugger
-      // convert public key from object to array buffer
-      let publicKey = await window.crypto.subtle.exportKey(
-        "spki",
-        keypair.publicKey
-      )
-      // convert public key from arraybuffer to string
-      publicKey = this.ab2b64(publicKey)
-
-
-      // let privateKey2 = await window.crypto.subtle.exportKey(
-      //   "spki",
-      //   keypair.privateKey
-      // )
-      // debugger
-      // let publicKey = keypair.publicKey
-      let privateKey = keypair.privateKey
-
-      self.publicKey = publicKey
+      const { privateKey, publicKey, revocationCertificate } = await openpgp.generateKey({
+          type: 'ecc', // Type of the key, defaults to ECC
+          curve: 'curve25519', // ECC curve name, defaults to curve25519
+          userIDs: [{ name: 'Jon Smith', email: 'jon@example.com' }], // you can pass multiple user IDs
+          passphrase: 'super long and hard to guess secret', // protects the private key
+          format: 'armored' // output key format, defaults to 'armored' (other options: 'binary' or 'object')
+      })
 
       // put new hash into db
       await this.db.hashes.put({
