@@ -43,13 +43,29 @@ export default {
       })
     },
 
+    createRandomString: function(length=10) {
+      const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+      let result = ""
+      const randomArray = new Uint8Array(length)
+      crypto.getRandomValues(randomArray)
+
+      randomArray.forEach((number) => {
+        result += chars[number % chars.length];
+      })
+      return result
+    },
+
+
     generateKeys : async function() {
+      const name = `${self.createRandomString()} ${self.createRandomString()}`
+      const email = `${self.createRandomString()}@${self.createRandomString()}`
+      const passphrase = self.createRandomString(20)
 
       const { privateKey, publicKey, revocationCertificate } = await openpgp.generateKey({
           type: 'ecc', // Type of the key, defaults to ECC
           curve: 'curve25519', // ECC curve name, defaults to curve25519
-          userIDs: [{ name: 'Jon Smith', email: 'jon@example.com' }], // you can pass multiple user IDs
-          passphrase: 'super long and hard to guess secret', // protects the private key
+          userIDs: [{ name, email }], // you can pass multiple user IDs
+          passphrase: passphrase, // protects the private key
           format: 'armored' // output key format, defaults to 'armored' (other options: 'binary' or 'object')
       })
 
@@ -57,6 +73,7 @@ export default {
       await this.db.hashes.put({
         public: publicKey,
         private: privateKey,
+        passphrase: passphrase,
       })
     },
   },
