@@ -57,9 +57,9 @@ export default {
 
 
     generateKeys : async function() {
-      const name = `${self.createRandomString()} ${self.createRandomString()}`
-      const email = `${self.createRandomString()}@${self.createRandomString()}`
-      const passphrase = self.createRandomString(20)
+      const name = `${this.createRandomString()} ${this.createRandomString()}`
+      const email = `${this.createRandomString()}@${this.createRandomString()}.com`
+      const passphrase = this.createRandomString(20)
 
       const { privateKey, publicKey, revocationCertificate } = await openpgp.generateKey({
           type: 'ecc', // Type of the key, defaults to ECC
