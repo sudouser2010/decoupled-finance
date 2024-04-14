@@ -43,43 +43,24 @@ export default {
       })
     },
 
-    createRandomString: function(length=10) {
-      const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
-      let result = ""
-      const randomArray = new Uint8Array(length)
-      crypto.getRandomValues(randomArray)
-
-      randomArray.forEach((number) => {
-        result += chars[number % chars.length];
-      })
-      return result
-    },
-
-
     generateKeys : async function() {
-      const name = `${this.createRandomString()} ${this.createRandomString()}`
-      const email = `${this.createRandomString()}@${this.createRandomString()}.com`
-      const passphrase = this.createRandomString(20)
+      const rsa = new RSA()
+      rsa.generateKeyPair(async function(keyPair) {
 
-      const { privateKey, publicKey, revocationCertificate } = await openpgp.generateKey({
-          type: 'ecc', // Type of the key, defaults to ECC
-          curve: 'curve25519', // ECC curve name, defaults to curve25519
-          userIDs: [{ name, email }], // you can pass multiple user IDs
-          passphrase: passphrase, // protects the private key
-          format: 'armored' // output key format, defaults to 'armored' (other options: 'binary' or 'object')
-      })
+        // put new hash into db
+        await self.db.hashes.put({
+          public: keyPair.publicKey,
+          private: keyPair.privateKey,
+        })
 
-      // put new hash into db
-      await this.db.hashes.put({
-        public: publicKey,
-        private: privateKey,
-        passphrase: passphrase,
-      })
+      }, 4096)
+
     },
   },
   mounted: async function() {
     // initDB
     await this.initDB()
+    self = this
 
     // get all hashes
     const hashes = await this.db.hashes.toArray()
@@ -87,7 +68,6 @@ export default {
     if (hashes.length === 0) {
       // create new public key and private key
       await this.generateKeys()
-
     } else {
       // use preexisting public key
       self.publicKey = hashes[0].public
