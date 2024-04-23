@@ -30,6 +30,7 @@ createApp({
    return {
        router: router,
        balance: ' ',
+       sendTokenModalActive: false,
       }
    },
   methods:{

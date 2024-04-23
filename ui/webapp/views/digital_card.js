@@ -1,5 +1,9 @@
+import send_token_modal from './send_token_modal.js'
+
+
 export default {
   components: {
+    send_token_modal,
   },
    template : `   
     <component is="style">
@@ -23,6 +27,7 @@ export default {
     position-ring-color="#13532d"
     position-center-color="#70c559"
     ></qr-code>
+    <send_token_modal></send_token_modal>    
    `,
   data: () => ({
     db: null,

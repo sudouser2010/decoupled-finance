@@ -23,6 +23,7 @@ export default {
     <div style="width: 30%; text-align: right">
       <v-btn variant="outlined" size="small"
         style="margin-right: 20px;"
+        @click="$root.sendTokenModalActive = true"
       >
         Send Token
       </v-btn>      
